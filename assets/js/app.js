@@ -122,8 +122,7 @@ function removeTask(e) {
         }
 
     }
-    removefromDB(e.target.parentElement.parentElement);
-
+    
 }
 
 

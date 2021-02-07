@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         2. Use the id on put method of index db
         
         */
+       
 
         history.back();
     }

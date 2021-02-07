@@ -20,7 +20,7 @@
 
 
     <!-- Navigation  -->
-    <nav id="main-header">
+    <nav>
         <div class="container">
             <div class="nav-wrapper ">
                 <a href="#" class="brand-logo right"><i class="fa fa-retweet"></i></a>
@@ -44,27 +44,16 @@
         <div class="col s12">
             <div id="main" class="card">
                 <div class="card-content">
-                    <span class="card-title">Daily Task Manager</span>
+                    <span class="card-title">Update Task Page</span>
                     <div class="row">
                         <form id="task-form">
                             <div class="input-field col s12">
                                 <input type="text" name="task" id="task">
-                                <label for="task">Add New Task</label>
                             </div>
-                            <input type="submit" value="Add a New Task" class="btn blue">
+                            <input type="submit" value="Update Task" class="btn blue">
                         </form>
 
                     </div>
-                </div>
-                <div class="card-action">
-                    <h5 id="task-title">List of Tasks</h5>
-                    <div class="input-field col s12">
-                        <input type="text" name="filter" id="filter" onkeyup="filterTasks()" placeholder="Search for tasks">
-
-                        <ul  class = "collection" id="id01">
-                            <li><a href="#">List of all Tasks</a></li>                          
-                        </ul>      
-                    <a href="#" class="clear-tasks btn red">Clear All Tasks</a>
                 </div>
             </div>
         </div>
@@ -81,11 +70,11 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <!-- Materialize Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- Storage Js -->
+    <!-- <script src="assets/js/indexDB.js"></script> -->
     <!-- Our Own Js  -->
-    <script src="assets/js/storage.js"></script>
-    <script src="assets/js/app.js"></script>
     <script src="assets/js/edit.js"></script>
-    <script src="assets/js/bom.js"></script>
 </body>
 
 </html>
