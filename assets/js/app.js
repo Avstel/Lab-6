@@ -28,6 +28,7 @@ reloadIcon.addEventListener('click', reloadPage);
 function addNewTask(e) {
 
     e.preventDefault(); //disable form submission
+    
 
 
     // Check empty entry
@@ -53,10 +54,7 @@ function addNewTask(e) {
     li.appendChild(link);
     // Append to UL 
     taskList.appendChild(li);
-
-
-
-
+    addToDatabase(taskInput.value)
 }
 
 
@@ -73,6 +71,7 @@ function clearAllTasks() {
     while (taskList.firstChild) {
         taskList.removeChild(taskList.firstChild);
     }
+    clearAllTasksfromDB();
 
 }
 
@@ -123,6 +122,8 @@ function removeTask(e) {
         }
 
     }
+    removefromDB(e.target.parentElement.parentElement);
+
 }
 
 
