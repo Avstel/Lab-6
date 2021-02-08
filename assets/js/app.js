@@ -7,133 +7,203 @@ const clearBtn = document.querySelector('.clear-tasks'); //the all task clear bu
 
 const reloadIcon = document.querySelector('.fa'); //the reload button at the top navigation 
 
-// var tasks1 = document.querySelectorAll('.collection-item');
-// const tasks = document.querySelectorAll('.collection-item');cons
+ascend = document.querySelector('.ascending');
+decend = document.querySelector('.decending') 
+
+//DB variable 
+
+let DB;
 
 
+  
+  
 
-
-// Add Event Listener  [Form , clearBtn and filter search input ]
-
-// form submit 
-form.addEventListener('submit', addNewTask);
-// Clear All Tasks
-clearBtn.addEventListener('click', clearAllTasks);
-//   Filter Task 
-filter.addEventListener('keyup', filterTasks);
-// Remove task event [event delegation]
-taskList.addEventListener('click', removeTask);
-// Event Listener for reload 
-reloadIcon.addEventListener('click', reloadPage);
-
-
-
-
-
-
-
-// Add New  Task Function definition 
-function addNewTask(e) {
-
-    e.preventDefault(); //disable form submission
-
-
-    // Check empty entry
-    if (taskInput.value === '') {
-        taskInput.style.borderColor = "red";
-
-        return;
-    }
-
-    // Create an li element when the user adds a task 
-    const li = document.createElement('li');
-    // Adding a class
-    li.className = 'collection-item';
-    // Create text node and append it 
-    li.appendChild(document.createTextNode(taskInput.value));
-    // Create new element for the link 
-    const link = document.createElement('a');
-    // Add class and the x marker for a 
-    link.className = 'delete-item secondary-content';
-    link.innerHTML = '<i class="fa fa-remove"></i>';
-    // Append link to li
-    li.appendChild(link);
-    // Append to UL 
-    taskList.appendChild(li);
-    taskInput.value = "";
-    
-
-
-
-
-}
-
-
-
-
-
-// Clear Task Function definition 
-function clearAllTasks() {
-
-    //This is the first way 
-    // taskList.innerHTML = '';
-
-    //  Second Wy 
-    while (taskList.firstChild) {
-        taskList.removeChild(taskList.firstChild);
-    }
-
-}
-
-
-
-// Filter tasks function definition 
-function filterTasks(e) {
-
-    /*  
-    Instruction for Handling the Search/filter 
-    
-    1. Receive the user input from the text input 
-    2. Assign it to a variable so the us can reuse it 
-    3. Use the querySelectorAll() in order to get the collection of li which have  .collection-item class 
-    4. Iterate over the collection item Node List using forEach
-    5. On each element check if the textContent of the li contains the text from User Input  [can use indexOf]
-    6 . If it contains , change the display content of the element as block , else none
-    
-    
-    */
-    // let tasks = taskList.querySelectorAll('.collection-item');
-    
-    var tasks = document.querySelectorAll('.collection-item');
-     for(let i = 0; i < tasks.length;i++){
-        let a = tasks[i].textContent;
-        if(a.indexOf(filter.value) != -1){
-            tasks[i].style.display = "block";
-        }
-        else{
-            tasks[i].style.display = "none"
-        }
-   }
    
-}
+// Add Event Listener [on Load]
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // create the database
+    let TasksDB = indexedDB.open('tasks', 1);
 
+    // if there's an error
+    TasksDB.onerror = function() {
+            console.log('There was an error');
+        }
+        // if everything is fine, assign the result to the instance
+    TasksDB.onsuccess = function() {
+        // console.log('Database Ready');
 
+        // save the result
+        DB = TasksDB.result;
 
+        // display the Task List 
+        displayTaskList();
+        var elems = document.querySelectorAll('.dropdown-trigger');
+        var instances = M.Dropdown.init(elems, hover=true);
+        var instance = M.Dropdown.getInstance(elems);
+        
+    }
 
-// Remove Task function definition 
-function removeTask(e) {
-    if (e.target.parentElement.classList.contains('delete-item')) {
-        if (confirm('Are You Sure about that ?')) {
-            e.target.parentElement.parentElement.remove();
+    // This method runs once (great for creating the schema)
+    TasksDB.onupgradeneeded = function(e) {
+        // the event will be the database
+        let db = e.target.result;
+
+        // create an object store, 
+        // keypath is going to be the Indexes
+        let objectStore = db.createObjectStore('tasks', { keyPath: 'id', autoIncrement: true });
+
+        // createindex: 1) field name 2) keypath 3) options
+        objectStore.createIndex('taskname', 'taskname', { unique: false });
+        objectStore.createIndex('date','date',{unique:false})
+
+        console.log('Database ready and fields created!');
+    }
+
+    form.addEventListener('submit', addNewTask);
+
+    function addNewTask(e) {
+        e.preventDefault();
+
+        // Check empty entry
+        if (taskInput.value === '') {
+            taskInput.style.borderColor = "red";
+
+            return;
+        }
+
+        // create a new object with the form info
+        let newTask = {
+            taskname: taskInput.value,
+            date: new Date()
+        }
+
+        // Insert the object into the database 
+        let transaction = DB.transaction(['tasks'], 'readwrite');
+        let objectStore = transaction.objectStore('tasks');
+
+        let request = objectStore.add(newTask);
+
+        // on success
+        request.onsuccess = () => {
+            form.reset();
+        }
+        transaction.oncomplete = () => {
+            console.log('New appointment added');
+
+            displayTaskList();
+        }
+        transaction.onerror = () => {
+            console.log('There was an error, try again!');
+        }
+
+    }
+
+    function displayTaskList() {
+        // clear the previous task list
+        while (taskList.firstChild) {
+            taskList.removeChild(taskList.firstChild);
+        }
+
+        // create the object store
+        let objectStore = DB.transaction('tasks').objectStore('tasks');
+
+        objectStore.openCursor().onsuccess = function(e) {
+            // assign the current cursor
+            let cursor = e.target.result;
+
+            if (cursor) {
+
+                // Create an li element when the user adds a task 
+                const li = document.createElement('li');
+                //add Attribute for delete 
+                li.setAttribute('data-task-id', cursor.value.id);
+                // Adding a class
+                li.className = 'collection-item';
+                // Create text node and append it 
+                li.appendChild(document.createTextNode(cursor.value.taskname));
+                
+                // var date = document.createElement('span');
+                // date.className = 'date'
+                // date.innerHTML = new Date()
+
+                
+                // Create new element for the link 
+                const link = document.createElement('a');
+                // Add class and the x marker for a 
+                link.className = 'delete-item secondary-content';
+                link.innerHTML = `
+                 <i class="fa fa-remove"></i>
+                &nbsp;
+                <a href="edit.html?id=${cursor.value.id}"><i class="fa fa-edit"></i> </a>
+                `;
+                // Append link to li
+                li.appendChild(link);
+                // Append to UL 
+                taskList.appendChild(li);
+                cursor.continue();
+            }
+        }
+    }
+
+    // Remove task event [event delegation]
+    taskList.addEventListener('click', removeTask);
+
+    function removeTask(e) {
+
+        if (e.target.parentElement.classList.contains('delete-item')) {
+            if (confirm('Are You Sure about that ?')) {
+                // get the task id
+                let taskID = Number(e.target.parentElement.parentElement.getAttribute('data-task-id'));
+                // use a transaction
+                let transaction = DB.transaction(['tasks'], 'readwrite');
+                let objectStore = transaction.objectStore('tasks');
+                objectStore.delete(taskID);
+
+                transaction.oncomplete = () => {
+                    e.target.parentElement.parentElement.remove();
+                }
+
+            }
 
         }
 
     }
-}
+
+    //clear button event listener   
+    clearBtn.addEventListener('click', clearAllTasks);
+
+    //clear tasks 
+    function clearAllTasks() {
+        let transaction = DB.transaction("tasks", "readwrite");
+        let tasks = transaction.objectStore("tasks");
+        // clear the table.
+        tasks.clear();
+        displayTaskList();
+        console.log("Tasks Cleared !!!");
+    }
+
+    ascend.addEventListener('click',ascending);
+    decend.addEventListener('click',decending);
+
+    function ascending(){
+
+        var tasks = document.querySelectorAll('.collection-item');
+       
+            for(let i = 0; i < tasks.length;i++){
+                taskList.append(tasks[i]);
+            }
+        
+    }
+
+    function decending(){
+        var tasks = document.querySelectorAll('.collection-item');
+       
+            for(let i = 0; i < tasks.length;i++){
+                taskList.prepend(tasks[i]);
+            }
+    }
 
 
-// Reload Page Function 
-function reloadPage() {
-    //using the reload fun on location object 
-    location.reload();
-}
+});
+

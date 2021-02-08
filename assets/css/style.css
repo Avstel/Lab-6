@@ -4,3 +4,7 @@ i {
 #filter li a:hover:not(.main-header){
     background-color: #eeee;
 }
+#sortbtn{
+    background-color:grey;
+    margin-right: auto;
+}

@@ -28,7 +28,6 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="">About </a></li>
                     <li><a href="bom.html">BOM</a></li>
-                    <li><a href="./edit.html">Update Tasks</a></li>
                 </ul>
             </div>
         </div>
@@ -58,7 +57,7 @@
                 </div>
                 <div class="card-action">
                     <h5 id="task-title">List of Tasks</h5>
-
+                    
                    
                       
                    
@@ -67,14 +66,7 @@
                     <div class="input-field col s12">
                         <input type="search" name="filter" id="filter">
                         <label for="filter">Search</label>
-                        <a class='dropdown-trigger btn gt' href='#' data-target='dropdown1'>sort by a date</a>
-
-                        <!-- Dropdown Structure -->
-                        <ul id='dropdown1' class='dropdown-content'>
-                          <li class="ascending"><a href="#!">Ascending</a></li>
-                          <li class= "decending"><a href="#!">Decending</a></li>
-                          
-                        </ul>
+                        
                     </div>
 
                     
@@ -86,6 +78,14 @@
                         <!-- Here is the task list goes  -->
                     </ul>
                     <a href="#" class="clear-tasks btn red">Clear All Task</a>
+                    <a class='dropdown-trigger btn gt' href='#' data-target='dropdown1' id="sortbtn">Sort Tasks</a>
+
+                        <!-- Dropdown Structure -->
+                        <ul id='dropdown1' class='dropdown-content'>
+                          <li class="ascending"><a href="#!">Time Ascend</a></li>
+                          <li class= "decending"><a href="#!">Time Decend</a></li>
+                          
+                        </ul>
                     
                 </div>
             </div>
