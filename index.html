@@ -20,7 +20,7 @@
 
 
     <!-- Navigation  -->
-    <nav id="main-header">
+    <nav>
         <div class="container">
             <div class="nav-wrapper ">
                 <a href="#" class="brand-logo right"><i class="fa fa-retweet"></i></a>
@@ -28,7 +28,7 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="">About </a></li>
                     <li><a href="bom.html">BOM</a></li>
-                    <li><a href="/edit.html">Update tasks</a></li>
+                    <li><a href="./edit.html">Update Tasks</a></li>
                 </ul>
             </div>
         </div>
@@ -51,20 +51,42 @@
                                 <input type="text" name="task" id="task">
                                 <label for="task">Add New Task</label>
                             </div>
-                            <input type="submit" value="Add a New Task" class="btn blue">
+                            <input type="submit" value="Add New Task" class="btn blue">
                         </form>
 
                     </div>
                 </div>
                 <div class="card-action">
                     <h5 id="task-title">List of Tasks</h5>
-                    <div class="input-field col s12">
-                        <input type="text" name="filter" id="filter" onkeyup="filterTasks()" placeholder="Search for tasks">
 
-                        <ul  class = "collection" id="id01">
-                            <li><a href="#">List of all Tasks</a></li>                          
-                        </ul>      
-                    <a href="#" class="clear-tasks btn red">Clear All Tasks</a>
+                   
+                      
+                   
+                    
+
+                    <div class="input-field col s12">
+                        <input type="search" name="filter" id="filter">
+                        <label for="filter">Search</label>
+                        <a class='dropdown-trigger btn gt' href='#' data-target='dropdown1'>sort by a date</a>
+
+                        <!-- Dropdown Structure -->
+                        <ul id='dropdown1' class='dropdown-content'>
+                          <li class="ascending"><a href="#!">Ascending</a></li>
+                          <li class= "decending"><a href="#!">Decending</a></li>
+                          
+                        </ul>
+                    </div>
+
+                    
+                    
+                    
+
+  
+                    <ul class="collection">
+                        <!-- Here is the task list goes  -->
+                    </ul>
+                    <a href="#" class="clear-tasks btn red">Clear All Task</a>
+                    
                 </div>
             </div>
         </div>
@@ -75,17 +97,15 @@
 
 
 
-
+   
 
     <!-- Jquery Compiled and minified JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <!-- Materialize Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <!-- Our Own Js  -->
-    <script src="assets/js/storage.js"></script>
     <script src="assets/js/app.js"></script>
-    <script src="assets/js/edit.js"></script>
-    <script src="assets/js/bom.js"></script>
 </body>
 
 </html>

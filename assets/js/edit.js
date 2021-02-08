@@ -1,6 +1,6 @@
 //UI variables 
 const form = document.querySelector('#task-form'); //The form at the top
-const taskInput = document.querySelector('#task'); //the task input text field
+var taskInput = document.querySelector('#task'); //the task input text field
 
 //read from q string 
 const urlParams = new URLSearchParams(window.location.search);
@@ -70,6 +70,32 @@ document.addEventListener('DOMContentLoaded', () => {
         2. Use the id on put method of index db
         
         */
+       var transaction = DB.transaction(['tasks'],"readwrite");
+       var objectStore = transaction.objectStore('tasks');
+       var request = objectStore.get(id);
+
+       request.onsuccess =function(event){
+           var data = request.result;
+
+           data.taskname = taskInput.value;
+           
+           
+           
+           var objectRequest = objectStore.put(data);
+           objectRequest.onsuccess = function(e){
+                
+               console.log("success is updating");
+           }
+       }
+
+       request.onerror =function(event){
+           console.log("error happened");
+       }
+       
+
+
+       
+
        
 
         history.back();

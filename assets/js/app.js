@@ -7,6 +7,12 @@ const clearBtn = document.querySelector('.clear-tasks'); //the all task clear bu
 
 const reloadIcon = document.querySelector('.fa'); //the reload button at the top navigation 
 
+// var tasks1 = document.querySelectorAll('.collection-item');
+// const tasks = document.querySelectorAll('.collection-item');cons
+
+
+
+
 // Add Event Listener  [Form , clearBtn and filter search input ]
 
 // form submit 
@@ -24,17 +30,17 @@ reloadIcon.addEventListener('click', reloadPage);
 
 
 
+
+
 // Add New  Task Function definition 
 function addNewTask(e) {
 
     e.preventDefault(); //disable form submission
-    
 
 
     // Check empty entry
     if (taskInput.value === '') {
         taskInput.style.borderColor = "red";
-        alert('Enter New Task ...');
 
         return;
     }
@@ -42,7 +48,7 @@ function addNewTask(e) {
     // Create an li element when the user adds a task 
     const li = document.createElement('li');
     // Adding a class
-    li.className = 'collection';
+    li.className = 'collection-item';
     // Create text node and append it 
     li.appendChild(document.createTextNode(taskInput.value));
     // Create new element for the link 
@@ -54,7 +60,12 @@ function addNewTask(e) {
     li.appendChild(link);
     // Append to UL 
     taskList.appendChild(li);
-    addToDatabase(taskInput.value)
+    taskInput.value = "";
+    
+
+
+
+
 }
 
 
@@ -71,20 +82,19 @@ function clearAllTasks() {
     while (taskList.firstChild) {
         taskList.removeChild(taskList.firstChild);
     }
-    clearAllTasksfromDB();
 
 }
 
 
 
 // Filter tasks function definition 
-function filterTasks() {
+function filterTasks(e) {
 
     /*  
     Instruction for Handling the Search/filter 
     
     1. Receive the user input from the text input 
-    2. Assign it to a variable we can reuse it 
+    2. Assign it to a variable so the us can reuse it 
     3. Use the querySelectorAll() in order to get the collection of li which have  .collection-item class 
     4. Iterate over the collection item Node List using forEach
     5. On each element check if the textContent of the li contains the text from User Input  [can use indexOf]
@@ -92,24 +102,21 @@ function filterTasks() {
     
     
     */
-   var input, filter, ul, li, a, i, txtValue;
-   input = document.getElementById('filter');
-   filter = input.value.toUpperCase();
-   ul = document.getElementById("id01");
-   li = ul.getElementsByTagName('li');
- 
-   // Loop through all list items, and hide those who don't match the search query
-   for (i = 0; i < li.length; i++) {
-     a = li[i].getElementsByTagName()[0];
-     txtValue = a.textContent || a.innerText;
-     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-       li[i].style.display = "";
-     } else {
-       li[i].style.display = "none";
-     }
+    // let tasks = taskList.querySelectorAll('.collection-item');
+    
+    var tasks = document.querySelectorAll('.collection-item');
+     for(let i = 0; i < tasks.length;i++){
+        let a = tasks[i].textContent;
+        if(a.indexOf(filter.value) != -1){
+            tasks[i].style.display = "block";
+        }
+        else{
+            tasks[i].style.display = "none"
+        }
    }
- }
-// Adding a dropdown section
+   
+}
+
 
 
 
@@ -122,7 +129,6 @@ function removeTask(e) {
         }
 
     }
-    
 }
 
 
